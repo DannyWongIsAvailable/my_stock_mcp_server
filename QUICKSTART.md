@@ -49,7 +49,7 @@ uv run mcp_server.py
 
 服务器将启动并等待 MCP 客户端连接。
 
-## 5. 在 Claude Desktop 中配置
+## 5. 在 client 中配置
 
 ### 5.1 找到配置文件
 
@@ -97,47 +97,8 @@ uv run mcp_server.py
     }
   }
 }
-```
 
-### 5.3 重启 Claude Desktop
 
-保存配置文件后，完全退出 Claude Desktop（确保后台进程也已关闭），然后重新启动。
-
-## 6. 验证安装
-
-在 Claude Desktop 中，你应该能看到一个工具图标（通常是锤子或扳手图标）。点击它可以看到所有可用的股票数据工具。
-
-尝试询问 Claude:
-
-- "搜索贵州茅台的股票代码"
-- "查询600519的实时行情"
-- "获取最新交易日"
-- "分析000001最近一个月的K线走势"
-
-## 7. 常见问题
-
-### Q: 提示找不到 uv 命令
-**A**: 确保 uv 已正确安装并添加到系统 PATH。重启终端或电脑后再试。
-
-### Q: Claude Desktop 看不到工具
-**A**: 
-1. 检查配置文件路径是否正确（使用绝对路径）
-2. 确保 JSON 格式正确（可以用 JSON 验证器检查）
-3. 完全退出 Claude Desktop 重启
-4. 查看 Claude Desktop 的日志文件
-
-### Q: 工具调用失败
-**A**: 
-1. 检查 API Token 是否正确配置
-2. 查看服务器日志输出
-3. 确认网络连接正常
-4. 确认 stockapi.com.cn 服务可用
-
-### Q: Windows 路径问题
-**A**: Windows 路径示例:
-- ✅ `"C:\\Users\\YourName\\projects\\stock_mcp_server"`
-- ✅ `"C:/Users/YourName/projects/stock_mcp_server"`
-- ❌ `"C:\Users\YourName\projects\stock_mcp_server"` (单反斜杠会转义)
 
 ## 8. 查看日志
 
@@ -157,8 +118,6 @@ setup_logging(level=logging.DEBUG)  # 改为 DEBUG 级别
 
 如遇到问题，请检查:
 1. 日志输出
-2. Claude Desktop 的错误信息
+2. client 的错误信息
 3. API 配置是否正确
 4. 网络连接状态
-
-祝使用愉快! 📈

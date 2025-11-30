@@ -4,14 +4,10 @@
 
 ## 功能特性
 
-- 📊 实时股票行情数据
+- 📊 查找股票
 - 📈 K线数据查询（日线、周线、月线等）
-- 💰 财务报表数据
-- 📉 技术指标分析
-- 🔍 股票搜索和基本信息查询
-- 📅 交易日历管理
-- 🎯 支持灵活的日期范围查询
-
+- 📉 计算技术指标
+- 待开发...
 ## 环境要求
 
 - Python 3.12+
@@ -61,7 +57,7 @@ STOCKAPI_TOKEN=your_api_token_here
 uv run mcp_server.py
 ```
 
-### 在 Claude Desktop 中配置
+### client 中配置
 
 编辑 Claude Desktop 的配置文件：
 
@@ -77,7 +73,7 @@ uv run mcp_server.py
       "command": "uv",
       "args": [
         "--directory",
-        "C:\\path\\to\\stock_mcp_server",
+        "C:\\path\\to\\my_stock_mcp_server",
         "run",
         "mcp_server.py"
       ]
@@ -91,23 +87,19 @@ uv run mcp_server.py
 ## 项目结构
 
 ```
-stock_mcp_server/
+my_stock_mcp_server/
 ├── mcp_server.py              # MCP服务器主文件
 ├── pyproject.toml             # 项目配置文件
 ├── README.md                  # 项目说明文档
 ├── .env                       # 环境变量配置（需自行创建）
 └── src/
     ├── data_source_interface.py    # 数据源接口定义
-    ├── stockapi_data_source.py     # stockapi.com.cn数据源实现
+    ├── stock_data_source.py     # stockapi.com.cn数据源实现
     ├── utils.py                    # 通用工具函数
     ├── formatting/
-    │   └── markdown_formatter.py   # Markdown格式化工具
-    └── tools/
-        ├── stock_basic.py          # 股票基础信息工具
-        ├── stock_quotes.py         # 股票行情工具
-        ├── kline_data.py           # K线数据工具
-        ├── financial_reports.py    # 财务报表工具
-        └── date_utils.py           # 日期工具
+    │   └── markdown_formatter.py   # Markdown格式化工具（废弃）
+    └── tools/  # 工具模块
+
 ```
 
 ## 核心设计
@@ -115,7 +107,7 @@ stock_mcp_server/
 本项目采用**依赖注入**设计模式：
 
 1. `data_source_interface.py` 定义抽象数据源接口
-2. `stockapi_data_source.py` 提供具体实现
+2. `stock_data_source.py` 提供具体实现
 3. 各工具模块通过依赖注入获取数据源实例
 
 这种设计使得：
@@ -124,22 +116,7 @@ stock_mcp_server/
 - ✅ 便于单元测试
 - ✅ 代码解耦，维护性强
 
-## 可用工具
 
-### 股票基础信息
-- `search_stock`: 搜索股票代码和名称
-- `get_stock_basic_info`: 获取股票基本信息
-
-### 行情数据
-- `get_realtime_quote`: 获取实时行情
-- `get_kline_data`: 获取K线数据
-
-### 财务数据
-- `get_financial_report`: 获取财务报表
-
-### 日期工具
-- `get_latest_trading_date`: 获取最新交易日
-- `get_trading_calendar`: 获取交易日历
 
 ## 开发指南
 

@@ -1,8 +1,0 @@
-这是一个获取股票数据的接口文档,还有一些接口以后我再补充。
-写个MCP server，该项目是一个为中国A股市场提供数据服务的MCP（Model Context Protocol）服务器实现。它通过获取金融数据，并将这些数据以工具的形式暴露给支持MCP的AI模型。
-项目要结构清晰，代码做好封装，可以轻松维护扩展
-
-请写一个股票分析的MCP server项目,根据接口,可以帮助agent回答有关股票市场的任何问题, **Python 环境**: Python 3.12,  **依赖管理**: 使用 `uv` 包管理器安装依赖 **数据来源**: 基于www.stockapi.com.cn数据源。
-本项目于 Windows 环境下开发。"transportType": "stdio"
-
-请在my_stock_mcp_server/src/web_crawler_data_source.py实现get_search_result()，并补全接口方法

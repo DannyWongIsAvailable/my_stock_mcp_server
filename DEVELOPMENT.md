@@ -379,7 +379,6 @@ def _make_request_with_retry(self, endpoint, params, max_retries=3):
 
 - [MCP 官方文档](https://docs.mcp.run)
 - [FastMCP 文档](https://github.com/jlowin/fastmcp)
-- [StockAPI 文档](https://www.stockapi.com.cn/docs)
 
 ## 联系方式
 
