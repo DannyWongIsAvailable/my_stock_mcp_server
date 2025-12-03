@@ -19,7 +19,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 在项目根目录执行:
 
 ```bash
-cd my_stock_mcp_server
+cd real-time-stock-mcp-service
 uv sync
 ```
 
@@ -68,7 +68,7 @@ uv run mcp_server.py
       "command": "uv",
       "args": [
         "--directory",
-        "F:/Project/PyCharm/all-MCP-servers/my_stock_mcp_server",
+        "F:/Project/PyCharm/all-MCP-servers/real-time-stock-mcp-service",
         "run",
         "mcp_server.py"
       ]

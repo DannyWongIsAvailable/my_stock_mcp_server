@@ -1,6 +1,6 @@
-# 股票数据 MCP Server
+# 实时股票 MCP 服务
 
-这是一个为中国A股市场提供数据服务的MCP（Model Context Protocol）服务器实现。它通过stockapi.com.cn获取金融数据，并将这些数据以工具的形式暴露给支持MCP的AI模型。
+这是一个实时股票数据服务的MCP（Model Context Protocol）服务器。它通过stockapi.com.cn获取金融数据，并将这些数据以工具的形式暴露给支持MCP的AI模型。
 
 ## 功能特性
 

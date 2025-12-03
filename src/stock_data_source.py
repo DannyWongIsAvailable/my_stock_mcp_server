@@ -20,7 +20,7 @@ class WebCrawlerDataSource(FinancialDataSource):
         """        
         初始化网络爬虫数据源
         """
-        self.spider = None
+        self.kline_spider = None
         self.searcher = None
         logger.info("WebCrawler数据源实例已创建")
     
@@ -33,8 +33,9 @@ class WebCrawlerDataSource(FinancialDataSource):
         """
         try:
             # 初始化爬虫连接
-            from src.crawler_tools.clawler import EastMoneyKlineSpider, StockSearcher
-            self.spider = EastMoneyKlineSpider()
+            from src.crawler_tools.basic_data import StockSearcher
+            from src.crawler_tools.technical_data import KlineSpider
+            self.kline_spider = KlineSpider()
             self.searcher = StockSearcher()
             logger.info("WebCrawler连接成功")
             return True
@@ -47,7 +48,7 @@ class WebCrawlerDataSource(FinancialDataSource):
         清理数据源连接，释放资源
         """
         # 清理爬虫连接（如果需要的话）
-        self.spider = None
+        self.kline_spider = None
         self.searcher = None
         logger.info("WebCrawler连接已清理")
 
@@ -79,8 +80,8 @@ class WebCrawlerDataSource(FinancialDataSource):
             CrawlerDataSourceError: For other data source related errors.
             ValueError: If input parameters are invalid.
         """
-        # 检查spider是否已初始化
-        if self.spider is None:
+        # 检查kline_spider是否已初始化
+        if self.kline_spider is None:
             logger.error("爬虫未初始化")
             raise DataSourceError("爬虫未初始化，请先调用initialize()方法")
         
@@ -103,8 +104,8 @@ class WebCrawlerDataSource(FinancialDataSource):
         
         try:
             # 调用爬虫获取数据
-            klines = self.spider.get_k_history_data(
-                stock_codes=stock_code,
+            klines = self.kline_spider.get_klines(
+                stock_code=stock_code,
                 beg=beg,
                 end=end,
                 klt=klt,
@@ -214,8 +215,8 @@ class WebCrawlerDataSource(FinancialDataSource):
             DataSourceError: For other data source related errors.
             ValueError: If input parameters are invalid.
         """
-        # 检查spider是否已初始化
-        if self.spider is None:
+        # 检查kline_spider是否已初始化
+        if self.kline_spider is None:
             logger.error("爬虫未初始化")
             raise DataSourceError("爬虫未初始化，请先调用initialize()方法")
 

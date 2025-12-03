@@ -1,7 +1,7 @@
 [project]
-name = "stock-mcp-server"
+name = "real-time-stock-mcp-service"
 version = "0.1.0"
-description = "MCP Server for Chinese A-Share Stock Market Data Analysis"
+description = "Real-time Stock MCP Service for Chinese A-Share Market Data"
 authors = [
     {name = "Your Name", email = "your.email@example.com"}
 ]

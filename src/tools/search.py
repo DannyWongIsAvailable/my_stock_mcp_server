@@ -52,13 +52,21 @@ def register_search_tools(app: FastMCP, data_source: FinancialDataSource):
             for stock in search_results:
                 formatted_data.append({
                     '股票代码': stock.get('code', ''),
-                    '股票名称': stock.get('name', ''),
-                    '拼音缩写': stock.get('pinyinString', ''),
-                    '全拼': stock.get('pingyinall', ''),
+                    '股票名称': stock.get('shortName', ''),
+                    '市场类型': stock.get('securityTypeName', ''),
+                    '拼音': stock.get('pinyin', ''),
+                    '内部代码': stock.get('innerCode', ''),
+                    '市场编号': stock.get('market', ''),
+                    '证券类型': ', '.join(map(str, stock.get('securityType', []))),
+                    '小类类型': stock.get('smallType', ''),
+                    '状态': '正常' if stock.get('status', 0) == 10 else '异常',
+                    '标记': stock.get('flag', ''),
+                    '扩展小类类型': stock.get('extSmallType', ''),
                 })
 
             # 手动构建Markdown表格
-            columns = ['股票代码', '股票名称', '拼音缩写', '全拼']
+            columns = ['股票代码', '股票名称', '市场类型', '拼音', '内部代码', '市场编号',
+                       '证券类型', '小类类型', '状态', '标记', '扩展小类类型']
 
             # 创建表头
             header = "| " + " | ".join(columns) + " |"

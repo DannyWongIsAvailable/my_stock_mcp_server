@@ -5,7 +5,7 @@
 ## 📁 完整目录结构
 
 ```
-my_stock_mcp_server/
+real-time-stock-mcp-service/
 ├── mcp_server.py              # MCP服务器主文件
 ├── pyproject.toml             # 项目配置文件
 ├── README.md                  # 项目说明文档
