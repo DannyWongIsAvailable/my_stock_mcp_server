@@ -1,9 +1,9 @@
 [project]
 name = "real-time-stock-mcp-service"
 version = "0.1.0"
-description = "Real-time Stock MCP Service for Chinese A-Share Market Data"
+description = "一个获取实时股票数据服务和分析的MCP服务器"
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "茂", email = ""}
 ]
 readme = "README.md"
 requires-python = ">=3.12"

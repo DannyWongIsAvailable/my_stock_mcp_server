@@ -15,11 +15,10 @@
          │
          ├─→ data_source_interface.py  ← 定义抽象接口
          │
-         ├─→ stockapi_data_source.py   ← 具体实现
+         ├─→ stock_data_source.py   ← 具体实现
          │
          └─→ tools/                     ← 各个工具模块
-              ├─ stock_basic.py
-              ├─ stock_quotes.py
+              ├─ search.py
               ├─ kline_data.py
               └─ ...
 ```
@@ -82,7 +81,6 @@ def get_new_feature_data(self, param: str) -> Dict[str, Any]:
 import logging
 from mcp.server.fastmcp import FastMCP
 from src.data_source_interface import StockDataSource
-from src.formatting.markdown_formatter import MarkdownFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -123,10 +121,8 @@ def register_my_new_tools(app: FastMCP, data_source: StockDataSource):
             if not data:
                 return "未找到数据"
             
-            # 3. 格式化输出
-            formatted = MarkdownFormatter.format_key_value(data, "标题")
             
-            return formatted
+            return data
             
         except Exception as e:
             logger.error(f"工具执行出错: {e}")

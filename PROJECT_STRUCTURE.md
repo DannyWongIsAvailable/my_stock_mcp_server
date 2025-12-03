@@ -59,14 +59,14 @@ real-time-stock-mcp-service/
 #### `data_source_interface.py` - 数据源接口
 - **作用**: 定义数据源的抽象接口
 - **包含方法**:
-  - `search_stock()` - 搜索股票
-  - `get_stock_basic_info()` - 获取基本信息
-  - `get_kline_data()` - 获取K线数据
-  - `get_financial_report()` - 获取财务报表
-  - 等等...
+  - `get_stock_search()` - 搜索股票
+  - `get_historical_k_data()` - 获取K线数据
+  - `get_technical_indicators()` - 获取技术指标
+  - 等等...  
+
 - **设计模式**: 抽象基类 (ABC)
 
-#### `stockapi_data_source.py` - 数据源实现
+#### `stock_data_source.py` - 数据源实现
 - **作用**: 实现 StockAPI 数据源
 - **功能**:
   - 实现所有接口方法
@@ -85,49 +85,14 @@ real-time-stock-mcp-service/
   - 数字格式化
   - 类型转换
 
-### src/formatting/ 目录
-
-#### `markdown_formatter.py` - Markdown格式化
-- **作用**: 将数据转换为Markdown格式
-- **提供方法**:
-  - `format_table()` - 格式化表格
-  - `format_key_value()` - 格式化键值对
-  - `format_list()` - 格式化列表
-  - `format_section()` - 格式化章节
-
 ### src/tools/ 目录
 
 每个工具模块都遵循相同的模式：
 
-#### `stock_basic.py` - 股票基础信息
+#### `basic_data.py` - 股票基础信息
 - **工具**:
-  - `search_stock()` - 搜索股票
-  - `get_stock_info()` - 获取股票详情
-  - `list_all_stocks()` - 列出所有股票
+  - `search()` - 搜索股票
 
-#### `stock_quotes.py` - 股票行情
-- **工具**:
-  - `get_realtime_quote()` - 获取实时行情
-  - `get_multiple_quotes()` - 批量获取行情
-
-#### `kline_data.py` - K线数据
-- **工具**:
-  - `get_daily_kline()` - 获取日K线
-  - `get_weekly_kline()` - 获取周K线
-  - `get_monthly_kline()` - 获取月K线
-
-#### `financial_reports.py` - 财务报表
-- **工具**:
-  - `get_financial_report()` - 获取财务报表
-  - `compare_financial_reports()` - 对比财务报表
-
-#### `date_utils.py` - 日期工具
-- **工具**:
-  - `get_latest_trading_date()` - 获取最新交易日
-  - `get_trading_calendar()` - 获取交易日历
-  - `is_trading_day()` - 判断是否为交易日
-  - `get_recent_trading_days()` - 获取最近交易日
-  - `get_market_analysis_timeframe()` - 获取分析时间范围
 
 ## 🔄 数据流
 
@@ -138,13 +103,9 @@ MCP Server (mcp_server.py)
     ↓
 工具函数 (tools/*.py)
     ↓
-数据源实例 (stockapi_data_source.py)
+数据源实例 (stock_data_source.py.py)
     ↓
 StockAPI HTTP API
-    ↓
-返回数据
-    ↓
-格式化 (markdown_formatter.py)
     ↓
 返回给用户
 ```
@@ -172,19 +133,18 @@ StockAPI HTTP API
 ```
 mcp_server.py
     ├─→ data_source_interface.py
-    ├─→ stockapi_data_source.py
+    ├─→ stock_data_source.py
     ├─→ utils.py
     └─→ tools/
-         ├─→ stock_basic.py
-         ├─→ stock_quotes.py
+         ├─→ search.py
+         ├─→ kline_data.py
          └─→ ...
 
 tools/*.py
     ├─→ data_source_interface.py (接口依赖)
-    ├─→ formatting/markdown_formatter.py
     └─→ utils.py
 
-stockapi_data_source.py
+stock_data_source.py
     └─→ data_source_interface.py (实现接口)
 ```
 

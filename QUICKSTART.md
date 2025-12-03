@@ -27,7 +27,7 @@ uv sync
 
 ## 3. 配置 API 密钥 (可选)
 
-如果 stockapi.com.cn 需要 API 密钥，请创建 `.env` 文件:
+如果需要 API 密钥，请创建 `.env` 文件:
 
 ```bash
 cp .env.example .env
@@ -49,13 +49,13 @@ uv run mcp_server.py
 
 服务器将启动并等待 MCP 客户端连接。
 
-## 5. 在 client 中配置
+## 5. 在 client中配置(Claude为例) 
 
 ### 5.1 找到配置文件
 
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Linux**: `~/.config/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`  
+**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Linux**: `~/.config/Claude/claude_desktop_config.json`  
 
 ### 5.2 编辑配置文件
 
@@ -90,7 +90,7 @@ uv run mcp_server.py
       "command": "uv",
       "args": [
         "--directory",
-        "/home/username/projects/stock_mcp_server",
+        "/home/username/projects/real-time-stock-mcp-service",
         "run",
         "mcp_server.py"
       ]
