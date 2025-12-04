@@ -108,3 +108,27 @@ class FinancialDataInterface(ABC):
             ValueError: If input parameters are invalid.
         """
         pass
+
+    @abstractmethod
+    def get_last_trading_day(self) -> Optional[Dict]:
+        """
+        获取最近交易日信息
+
+        Returns:
+            包含交易日信息的字典，例如：
+            {
+                "data": [
+                    {"jybz": "1", "jyrq": "2025-12-04"},
+                    {"jybz": "1", "jyrq": "2025-12-05"}
+                ],
+                "nowdate": "2025-12-04"
+            }
+            
+            其中 jybz: 交易标志（1表示交易日，0表示休市）
+                 jyrq: 交易日期
+                 nowdate: 当前日期
+
+        Raises:
+            DataSourceError: 当数据源出现错误时
+        """
+        pass

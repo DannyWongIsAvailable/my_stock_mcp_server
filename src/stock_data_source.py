@@ -207,3 +207,34 @@ class WebCrawlerDataSource(FinancialDataInterface):
         # 直接返回原始K线数据，不进行技术指标计算
         logger.info(f"成功获取股票 {stock_code} 的 {len(k_data)} 条K线数据")
         return k_data
+
+    def get_last_trading_day(self) -> Optional[Dict]:
+        """
+        获取最近交易日信息
+
+        Returns:
+            包含交易日信息的字典
+
+        Raises:
+            DataSourceError: 当数据源出现错误时
+        """
+        # 检查searcher是否已初始化
+        if self.searcher is None:
+            logger.error("股票搜索器未初始化")
+            raise DataSourceError("股票搜索器未初始化，请先调用initialize()方法")
+
+        try:
+            # 调用搜索器获取最近交易日数据
+            last_trading_day_data = self.searcher.last_trading_day()
+
+            # 如果没有数据，返回None
+            if not last_trading_day_data:
+                logger.info("未获取到最近交易日信息")
+                return None
+
+            logger.info("成功获取最近交易日信息")
+            return last_trading_day_data
+
+        except Exception as e:
+            logger.error(f"获取最近交易日信息失败: {e}")
+            raise DataSourceError(f"获取最近交易日信息失败: {e}")

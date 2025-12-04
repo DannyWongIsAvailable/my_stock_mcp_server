@@ -336,7 +336,7 @@ def register_kline_tools(app: FastMCP, data_source: FinancialDataInterface):
         获取技术指标数据
 
         获取指定股票在指定日期范围内的技术指标数据。
-        注: 日期范围会限制计算长期数据
+        注: 日期范围会限制计算长期数据，应传入日期范围尽可能长的参数
 
         Args:
             stock_code: 股票代码

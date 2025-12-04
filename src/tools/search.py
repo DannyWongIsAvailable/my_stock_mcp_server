@@ -95,3 +95,63 @@ def register_search_tools(app: FastMCP, data_source: FinancialDataInterface):
         except Exception as e:
             logger.error(f"搜索股票时出错: {e}")
             return f"搜索股票失败: {str(e)}"
+
+    @app.tool()
+    def get_last_trading_day() -> str:
+        """
+        获取最近交易日信息
+
+        获取最新的交易日历信息，包括最近的交易日和休市日。
+
+        Returns:
+            最近交易日信息的Markdown表格
+
+        Examples:
+            - get_last_trading_day()
+        """
+        try:
+            logger.info("获取最近交易日信息")
+
+            # 从数据源获取最近交易日信息
+            trading_data = data_source.get_last_trading_day()
+
+            if not trading_data:
+                return "未能获取到交易日信息"
+
+            # 解包并格式化数据
+            raw_data = trading_data.get("data", [])
+            now_date = trading_data.get("nowdate", "")
+            
+            if not raw_data:
+                return "交易日数据为空"
+
+            # 格式化数据
+            formatted_data = []
+            for item in raw_data:
+                # 处理交易状态显示
+                trade_status = '交易日' if item.get('jybz', '0') == '1' else '休市'
+                
+                formatted_data.append({
+                    '交易日序号': item.get('zrxh', ''),
+                    '日期': item.get('jyrq', ''),
+                    '状态': trade_status,
+                })
+
+            # 构建Markdown表格
+            columns = ['交易日序号', '日期', '状态']
+            header = "| " + " | ".join(columns) + " |"
+            separator = "| " + " | ".join(["---"] * len(columns)) + " |"
+
+            rows = []
+            for item in formatted_data:
+                row_data = [str(item.get(col, "")) for col in columns]
+                row = "| " + " | ".join(row_data) + " |"
+                rows.append(row)
+
+            table = "\n".join([header, separator] + rows)
+            note = f"\n\n📅 当前日期: {now_date}"
+            return f"## 最近交易日信息\n\n{table}{note}"
+
+        except Exception as e:
+            logger.error(f"获取最近交易日信息时出错: {e}")
+            return f"获取最近交易日信息失败: {str(e)}"

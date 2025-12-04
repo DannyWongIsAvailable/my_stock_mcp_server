@@ -17,7 +17,8 @@ class StockSearcher(EastMoneyBaseSpider):
         results = searcher.search("宁德")
     """
 
-    BASE_URL = "https://search-codetable.eastmoney.com/codetable/search/web"
+    SEARCH_URL = "https://search-codetable.eastmoney.com/codetable/search/web"
+    LAST_TRADING_DAY_URL = "https://www.szse.cn/api/report/exchange/onepersistenthour/monthList?"
 
     def __init__(
             self,
@@ -50,7 +51,7 @@ class StockSearcher(EastMoneyBaseSpider):
         }
 
         try:
-            data = self._get_jsonp(self.BASE_URL, params)
+            data = self._get_jsonp(self.SEARCH_URL, params)
             if data is None:
                 print(f"[StockSearcher] 解析 JSONP 响应失败")
                 return None
@@ -70,12 +71,41 @@ class StockSearcher(EastMoneyBaseSpider):
             print(f"[StockSearcher] 请求出错: {e}")
             return None
 
+    def last_trading_day(self) -> Optional[Dict]:
+        """
+        获取最近交易日信息
+
+        :return: 包含交易日信息的字典，失败返回 None
+        """
+        # 保存原始headers
+        original_headers = self.headers.copy()
+        
+        # 设置适合深交所API的请求头
+        self.headers["Referer"] = "https://www.szse.cn/"
+        self.headers["Host"] = "www.szse.cn"
+        
+        try:
+            response = self._get(self.LAST_TRADING_DAY_URL)
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            print(f"[StockSearcher] 获取最近交易日信息出错: {e}")
+            return None
+        finally:
+            # 恢复原始headers
+            self.headers = original_headers
+
 if __name__ == '__main__':
-    # 搜索股票
     searcher = StockSearcher()
+    # 获取最近交易日信息
+    last_trading_day = searcher.last_trading_day()
+    print(f"api返回: {last_trading_day}")
+
+    # 搜索股票
     results = searcher.search("赛力")
     print(f"api返回: {results}")
     if results:
         print("格式化搜索结果:")
         for item in results[:3]:
             print(f"  {item['code']} - {item['shortName']} ({item['securityTypeName']})")
+
