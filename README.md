@@ -61,8 +61,8 @@ uv run mcp_server.py
 
 编辑 Claude Desktop 的配置文件：
 
-**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-**MacOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`  
+**MacOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
 
 添加以下配置：
 
