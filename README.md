@@ -88,13 +88,16 @@ real-time-stock-mcp-service/
 └── src/
     ├── crawler/               # 网络爬虫模块
     │   ├── base_crawler.py       # 爬虫基类
-    │   ├── basic_data.py         # 基础数据爬虫
-    │   └── technical_data.py     # 技术数据爬虫
+    │   ├── basic_data.py         # 基础数据爬虫（股票搜索、交易日信息）
+    │   ├── real_time_data.py     # 实时数据爬虫（来自雪球）
+    │   ├── technical_data.py     # 技术数据爬虫（K线数据）
+    │   └── ...              
     ├── data_source_interface.py  # 数据源接口定义
-    ├── stock_data_source.py      # 东方财富网数据源实现
+    ├── stock_data_source.py      # 数据源实现
     ├── mcp_tools/                # 各个MCP工具模块
     │   ├── kline_data.py         # K线数据工具
-    │   └── search.py             # 股票搜索工具
+    │   ├── real_time_data.py     # 实时数据工具
+    │   └── ...
     └── utils/                    # 工具模块
         ├── markdown_formatter.py # Markdown格式化工具
         └── utils.py              # 通用工具
@@ -104,9 +107,10 @@ real-time-stock-mcp-service/
 
 本项目采用**依赖注入**设计模式：
 
-1. `data_source_interface.py` 定义抽象数据源接口
-2. `stock_data_source.py` 提供具体实现
-3. 各工具模块通过依赖注入获取数据源实例
+1. `crawler` 模块获取数据
+2. `data_source_interface.py` 定义抽象数据源接口
+3. `stock_data_source.py` 提供具体实现
+4. 各工具模块通过依赖注入获取数据源实例
 
 这种设计使得：
 - ✅ 易于扩展新功能
@@ -118,39 +122,7 @@ real-time-stock-mcp-service/
 
 ## 开发指南
 
-### 添加新工具
-
-1. 在 `src/mcp_tools/` 目录创建新的工具模块
-2. 实现工具函数并定义注册函数
-3. 在 `mcp_server.py` 中导入并注册
-
-示例：
-
-```python
-# src/mcp_tools/my_new_tool.py
-from mcp.server.fastmcp import FastMCP
-from src.data_source_interface import StockDataSource
-
-def register_my_tools(app: FastMCP, data_source: StockDataSource):
-    @app.tool()
-    def my_new_tool(param: str) -> str:
-        """工具描述"""
-        # 使用 data_source 获取数据
-        data = data_source.get_some_data(param)
-        return format_data(data)
-```
-
-### 切换数据源
-
-只需修改 `mcp_server.py` 中的数据源实例化代码：
-
-```python
-# 原来
-active_data_source: FinancialDataInterface = WebCrawlerDataSource()
-
-# 切换为其他数据源
-active_data_source: FinancialDataInterface = AnotherDataSource()
-```
+详情请查看[开发指南](DEVELOPMENT.md)  
 
 ## 注意事项
 

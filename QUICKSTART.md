@@ -98,7 +98,7 @@ setup_logging(level=logging.DEBUG)  # 改为 DEBUG 级别
 ## 6. 下一步
 
 - 阅读 [README.md](README.md) 了解所有可用工具
-- 查看项目结构了解如何添加新功能
+- 查看[开发指南](DEVELOPMENT.md)了解如何添加新功能
 - 探索各个工具模块的实现
 
 ## 需要帮助?

@@ -21,6 +21,13 @@
          │   ├── utils.py    # 工具模块通用工具
          │   └── markdown_formatter.py   # Markdown格式化工具
          │
+         ├── crawler/                   ← 网络爬虫模块
+         │   ├── base_crawler.py        # 爬虫基类
+         │   ├── basic_data.py          # 基础数据爬虫
+         │   ├── real_time_data.py      # 实时数据爬虫
+         │   ├── technical_data.py      # 技术数据爬虫
+         │   └── test.py                # 爬虫测试脚本
+         │
          └─→ mcp_tools/                     ← 各个MCP工具模块
               ├─ search.py
               ├─ kline_data.py
@@ -33,11 +40,88 @@
 - ✅ 便于单元测试
 - ✅ 清晰的代码结构
 
+## 爬虫模块说明
+
+### 爬虫基类
+
+项目中的所有网络爬虫都继承自 [EastMoneyBaseSpider](../src/crawler/base_crawler.py) 基类。该基类提供了通用的网络请求功能，包括：
+
+- Session管理和请求封装
+- 请求头/Cookies配置
+- JSONP解析
+- 股票代码格式转换
+
+所有具体的爬虫类都应该继承这个基类，以复用这些通用功能。
+
 ## 如何添加新功能
 
-### 1. 添加新的数据获取方法
+### 1. 添加新的爬虫
 
-如果需要添加新的数据获取功能：
+如果你想添加一个新的爬虫来获取特定的数据，可以按照以下步骤进行：
+
+#### 步骤 1: 创建新的爬虫类
+
+在 [src/crawler/](../src/crawler/) 目录下创建新的爬虫文件，继承 [EastMoneyBaseSpider](../src/crawler/base_crawler.py) 基类：
+
+```python
+# src/crawler/my_new_crawler.py
+from .base_crawler import EastMoneyBaseSpider
+
+class MyNewCrawler(EastMoneyBaseSpider):
+    """新的数据爬虫示例"""
+    
+    def __init__(self, session=None, timeout=None):
+        super().__init__(session, timeout)
+        # 设置特定的请求头
+        self.headers["Referer"] = "https://example.com/"
+    
+    def get_my_data(self, param: str):
+        """获取特定数据"""
+        url = "https://example.com/api/data"
+        params = {"param": param}
+        return self._get_json(url, params)
+```
+
+#### 步骤 2: 在数据源中使用新的爬虫
+
+在 [WebCrawlerDataSource](../src/stock_data_source.py) 中使用这个新的爬虫：
+
+```python
+# src/stock_data_source.py
+from src.crawler.my_new_crawler import MyNewCrawler
+
+class WebCrawlerDataSource(FinancialDataInterface):
+    def __init__(self):
+        # 初始化新的爬虫
+        self.my_new_crawler = MyNewCrawler()
+        
+    def get_my_data(self, param: str):
+        """获取特定数据"""
+        return self.my_new_crawler.get_my_data(param)
+```
+
+#### 步骤 3: 在接口中添加对应的方法
+
+在 [data_source_interface.py](../src/data_source_interface.py) 中添加对应的接口方法：
+
+```python
+@abstractmethod
+def get_my_data(self, param: str) -> Dict[str, Any]:
+    """
+    获取特定数据
+    
+    Args:
+        param: 参数说明
+        
+    Returns:
+        返回数据格式
+    """
+    pass
+```
+
+### 2. 添加新的数据获取方法
+
+如果需要添加新的数据获取功能（不涉及新的爬虫）：
 
 #### 步骤 1: 在接口中定义方法
 
@@ -69,7 +153,7 @@ def get_new_feature_data(self, param: str) -> Dict[str, Any]:
     return data
 ```
 
-### 2. 添加新的工具模块
+### 3. 添加新的工具模块
 
 #### 步骤 1: 创建工具模块文件
 
@@ -147,7 +231,7 @@ from src.mcp_tools.my_new_tool import register_my_new_tools
 register_my_new_tools(app, active_data_source)
 ```
 
-### 3. 切换数据源
+### 4. 切换数据源
 
 如果想使用其他数据源（如 Tushare、AKShare 等）：
 
