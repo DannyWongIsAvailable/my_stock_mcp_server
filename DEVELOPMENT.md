@@ -26,7 +26,7 @@
          │   ├── basic_data.py          # 基础数据爬虫
          │   ├── real_time_data.py      # 实时数据爬虫
          │   ├── technical_data.py      # 技术数据爬虫
-         │   └── test.py                # 爬虫测试脚本
+         │   └── ...
          │
          └─→ mcp_tools/                     ← 各个MCP工具模块
               ├─ search.py
