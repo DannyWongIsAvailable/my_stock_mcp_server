@@ -218,3 +218,39 @@ class FinancialDataInterface(ABC):
             DataSourceError: 当数据源出现错误时
         """
         pass
+
+    @abstractmethod
+    def get_valuation_analysis(self, stock_code: str, indicator_type: int = 1, date_type: int = 3) -> Optional[Dict[Any, Any]]:
+        """
+        获取估值分析数据
+
+        Args:
+            stock_code: 股票代码，包含交易所代码，格式如300059.SZ
+            indicator_type: 指标类型
+                          1 - 市盈率TTM
+                          2 - 市净率MRQ
+                          3 - 市销率TTM
+                          4 - 市现率TTM
+            date_type: 时间周期类型
+                     1 - 1年
+                     2 - 3年
+                     3 - 5年
+                     4 - 10年
+
+        Returns:
+            估值分析数据字典，包含以下字段：
+            - SECUCODE: 股票代码
+            - TRADE_DATE: 交易日期
+            - INDICATOR_VALUE: 指标当前值
+            - INDICATOR_TYPE: 指标类型中文名称
+            - DATE_TYPE: 时间周期类型
+            - STATISTICS_CYCLE: 统计周期中文名称
+            - PERCENTILE_THIRTY: 30%历史分位数
+            - PERCENTILE_FIFTY: 50%历史分位数(中位数)
+            - PERCENTILE_SEVENTY: 70%历史分位数
+            如果没有找到数据或出错，返回包含错误信息的字典或者None
+
+        Raises:
+            DataSourceError: 当数据源出现错误时
+        """
+        pass

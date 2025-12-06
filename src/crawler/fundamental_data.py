@@ -1,8 +1,3 @@
-import sys
-import os
-# 添加项目根目录到 Python 路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
-
 from src.crawler.base_crawler import EastMoneyBaseSpider
 
 import requests
@@ -124,25 +119,6 @@ class FundamentalDataCrawler(EastMoneyBaseSpider):
         except Exception as e:
             return {"error": str(e)}
 
-    def get_financial_summary(self, stock_code: str) -> Optional[Dict[Any, Any]]:
-        """
-        获取财务摘要数据
-        
-        :param stock_code: 股票代码
-        :return: 财务摘要数据字典
-        """
-        # TODO: 实现获取财务摘要数据的方法
-        pass
-
-    def get_company_profile(self, stock_code: str) -> Optional[Dict[Any, Any]]:
-        """
-        获取公司概况
-        
-        :param stock_code: 股票代码
-        :return: 公司概况数据字典
-        """
-        # TODO: 实现获取公司概况的方法
-        pass
 
     def get_main_business(self, stock_code: str, report_date: Optional[str] = None) -> Optional[List[Dict[Any, Any]]]:
         """
@@ -182,28 +158,3 @@ class FundamentalDataCrawler(EastMoneyBaseSpider):
                 return [{"error": message}]
         except Exception as e:
             return [{"error": str(e)}]
-
-    def get_shareholder_info(self, stock_code: str) -> Optional[Dict[Any, Any]]:
-        """
-        获取股东信息
-        
-        :param stock_code: 股票代码
-        :return: 股东信息数据字典
-        """
-        # TODO: 实现获取股东信息的方法
-        pass
-
-    def get_dividend_info(self, stock_code: str) -> Optional[Dict[Any, Any]]:
-        """
-        获取分红信息
-        
-        :param stock_code: 股票代码
-        :return: 分红信息数据字典
-        """
-        # TODO: 实现获取分红信息的方法
-        pass
-
-
-if __name__ == '__main__':
-    # TODO: 添加测试代码
-    pass

@@ -24,6 +24,7 @@ class WebCrawlerDataSource(FinancialDataInterface):
         self.searcher = None
         self.real_time_spider = None
         self.fundamental_crawler = None
+        self.valuation_crawler = None
         logger.info("WebCrawler数据源实例已创建")
     
     def initialize(self) -> bool:
@@ -39,10 +40,12 @@ class WebCrawlerDataSource(FinancialDataInterface):
             from src.crawler.technical_data import KlineSpider
             from src.crawler.real_time_data import RealTimeDataSpider
             from src.crawler.fundamental_data import FundamentalDataCrawler
+            from src.crawler.valuation_data import ValuationDataCrawler
             self.kline_spider = KlineSpider()
             self.searcher = StockSearcher()
             self.real_time_spider = RealTimeDataSpider()
             self.fundamental_crawler = FundamentalDataCrawler()
+            self.valuation_crawler = ValuationDataCrawler()
             logger.info("WebCrawler连接成功")
             return True
         except Exception as e:
@@ -57,6 +60,8 @@ class WebCrawlerDataSource(FinancialDataInterface):
         self.kline_spider = None
         self.searcher = None
         self.real_time_spider = None
+        self.fundamental_crawler = None
+        self.valuation_crawler = None
         logger.info("WebCrawler连接已清理")
 
     # ==================== 行情数据 ====================
@@ -424,3 +429,57 @@ class WebCrawlerDataSource(FinancialDataInterface):
         except Exception as e:
             logger.error(f"获取经营评述数据失败: {e}")
             raise DataSourceError(f"获取经营评述数据失败: {e}")
+
+    def get_valuation_analysis(self, stock_code: str, indicator_type: int = 1, date_type: int = 3) -> Optional[Dict[Any, Any]]:
+        """
+        获取估值分析数据
+
+        Args:
+            stock_code: 股票代码，包含交易所代码，格式如300059.SZ
+            indicator_type: 指标类型
+                          1 - 市盈率TTM
+                          2 - 市净率MRQ
+                          3 - 市销率TTM
+                          4 - 市现率TTM
+            date_type: 时间周期类型
+                     1 - 1年
+                     2 - 3年
+                     3 - 5年
+                     4 - 10年
+
+        Returns:
+            估值分析数据字典，包含以下字段：
+            - SECUCODE: 股票代码
+            - TRADE_DATE: 交易日期
+            - INDICATOR_VALUE: 指标当前值
+            - INDICATOR_TYPE: 指标类型中文名称
+            - DATE_TYPE: 时间周期类型
+            - STATISTICS_CYCLE: 统计周期中文名称
+            - PERCENTILE_THIRTY: 30%历史分位数
+            - PERCENTILE_FIFTY: 50%历史分位数(中位数)
+            - PERCENTILE_SEVENTY: 70%历史分位数
+            如果没有找到数据或出错，返回包含错误信息的字典
+
+        Raises:
+            DataSourceError: 当数据源出现错误时
+        """
+        # 检查valuation_crawler是否已初始化
+        if self.valuation_crawler is None:
+            logger.error("估值数据爬虫未初始化")
+            raise DataSourceError("估值数据爬虫未初始化，请先调用initialize()方法")
+
+        try:
+            # 调用爬虫获取估值分析数据
+            valuation_analysis_data = self.valuation_crawler.get_valuation_analysis(stock_code, indicator_type, date_type)
+
+            # 如果没有数据，返回None
+            if valuation_analysis_data is None or "error" in valuation_analysis_data:
+                logger.info(f"未获取到股票 {stock_code} 的估值分析数据")
+                return valuation_analysis_data  # 返回包含错误信息的字典
+
+            logger.info(f"成功获取股票 {stock_code} 的估值分析数据")
+            return valuation_analysis_data
+
+        except Exception as e:
+            logger.error(f"获取估值分析数据失败: {e}")
+            raise DataSourceError(f"获取估值分析数据失败: {e}")

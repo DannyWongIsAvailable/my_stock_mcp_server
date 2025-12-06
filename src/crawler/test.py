@@ -1,20 +1,27 @@
-from src.crawler.fundamental_data import FundamentalDataCrawler
-crawler = FundamentalDataCrawler()
+from src.crawler.valuation_data import ValuationDataCrawler
 
-# 测试获取主营业务构成
-r = crawler.get_main_business("688041.SH", "2025-06-30")
-print("主营业务构成:")
-print(r)
+# 测试估值分析数据
+valuation_crawler = ValuationDataCrawler()
 
+# 测试默认参数（市盈率TTM，5年周期）
+print("测试默认参数（市盈率TTM，5年周期）:")
+valuation_data = valuation_crawler.get_valuation_analysis("688041.SH")
+print(valuation_data)
 
-#  测试获取主营业务范围
-# business_scope = crawler.get_business_scope("688041.SH")
-# print("\n主营业务范围:")
-# print(business_scope)
-#
-# # 测试获取经营评述
-# data = crawler.get_business_review("688041.SH")
-# # 提取BUSINESS_REVIEW内容
-# business_review = data.get('BUSINESS_REVIEW', 'N/A')
-# print("\n经营评述:")
-# print(business_review)
+# 测试市净率MRQ，3年周期
+print("\n测试市净率MRQ，3年周期:")
+pb_data = valuation_crawler.get_valuation_analysis(
+    "688041.SH", 
+    ValuationDataCrawler.INDICATOR_TYPE_PB_MRQ, 
+    ValuationDataCrawler.DATE_TYPE_3YEAR
+)
+print(pb_data)
+
+# 测试市销率TTM，10年周期
+print("\n测试市销率TTM，10年周期:")
+ps_data = valuation_crawler.get_valuation_analysis(
+    "688041.SH", 
+    ValuationDataCrawler.INDICATOR_TYPE_PS_TTM, 
+    ValuationDataCrawler.DATE_TYPE_10YEAR
+)
+print(ps_data)

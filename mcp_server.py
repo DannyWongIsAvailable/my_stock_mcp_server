@@ -22,6 +22,7 @@ from src.mcp_tools.search import register_search_tools as register_crawler_searc
 from src.mcp_tools.kline_data import register_kline_tools as register_crawler_kline_tools
 from src.mcp_tools.real_time_data import register_real_time_data_tools as register_crawler_real_time_tools
 from src.mcp_tools.fundamental import register_fundamental_tools as register_crawler_fundamental_tools
+from src.mcp_tools.valuation import register_valuation_tools as register_crawler_valuation_tools
 
 
 # --- 日志配置 ---
@@ -48,6 +49,8 @@ app = FastMCP(
 - 实时股票数据
 - K线数据（日线、周线、月线）
 - 计算技术指标
+- 基本面数据（主营构成、经营范围、经营评述等）
+- 估值分析数据（市盈率、市净率等）
 """
 )
 
@@ -60,6 +63,7 @@ register_crawler_search_tools(app, active_data_source)
 register_crawler_real_time_tools(app, active_data_source)
 register_crawler_kline_tools(app, active_data_source)
 register_crawler_fundamental_tools(app, active_data_source)
+register_crawler_valuation_tools(app, active_data_source)
 
 logger.info("所有工具模块注册完成")
 
@@ -77,13 +81,12 @@ if __name__ == "__main__":
     try:
         # 使用 stdio 传输协议运行服务器
         # 这是 MCP Host（如 Claude Desktop）所需的标准方式
-        logger.info("🎯 MCP Server 正在运行，等待客户端连接...")
-        app.run(transport='stdio')
+        app.run()
     except KeyboardInterrupt:
-        logger.info("⚡ 收到中断信号，正在关闭服务器...")
+        logger.info("🛑 服务器被用户中断")
     except Exception as e:
-        logger.error(f"❌ 服务器运行出错: {e}")
+        logger.exception(f"💥 服务器运行出错: {e}")
     finally:
-        # 清理数据源
+        # 清理资源
         active_data_source.cleanup()
-        logger.info("👋 服务器已关闭")
+        logger.info("🧹 资源清理完成，再见！")

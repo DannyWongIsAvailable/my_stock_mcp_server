@@ -29,7 +29,7 @@ def register_real_time_data_tools(app: FastMCP, data_source: FinancialDataInterf
         获取指定股票的实时行情数据，包括价格、涨跌幅、成交量等信息。
 
         Args:
-            symbol: 股票代码，例如 SZ300750 (SZ表示深圳证券交易所) 或 SH600519 (SH表示上海证券交易所)
+            symbol: 股票代码，格式为 SZ300750 (SZ表示深圳证券交易所) 或 SH600519 (SH表示上海证券交易所)
 
         Returns:
             格式化的实时股票数据，以Markdown表格形式展示
