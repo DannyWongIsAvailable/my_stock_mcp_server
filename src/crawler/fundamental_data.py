@@ -19,6 +19,7 @@ class FundamentalDataCrawler(EastMoneyBaseSpider):
     MAIN_BUSINESS_URL = "https://datacenter.eastmoney.com/securities/api/data/v1/get"
     REPORT_DATE_URL = "https://datacenter.eastmoney.com/securities/api/data/v1/get"
     BUSINESS_SCOPE_URL = "https://datacenter.eastmoney.com/securities/api/data/v1/get"
+    BUSINESS_REVIEW_URL = "https://datacenter.eastmoney.com/securities/api/data/v1/get"
 
     def __init__(
             self,
@@ -84,6 +85,35 @@ class FundamentalDataCrawler(EastMoneyBaseSpider):
         
         try:
             response = self._get_json(self.BUSINESS_SCOPE_URL, params)
+            # 检查响应是否成功
+            if response.get("code") == 0 and response.get("success") is True and response.get("result"):
+                return response["result"]["data"][0] if response["result"]["data"] else None
+            else:
+                # 如果不成功，返回错误信息
+                message = response.get("message", "未知错误")
+                return {"error": message}
+        except Exception as e:
+            return {"error": str(e)}
+
+    def get_business_review(self, stock_code: str) -> Optional[Dict[Any, Any]]:
+        """
+        获取经营评述
+        
+        :param stock_code: 股票代码，包含交易所代码，格式如688041.SH
+        :return: 经营评述数据字典
+        """
+        params = {
+            "reportName": "RPT_F10_OP_BUSINESSANALYSIS",
+            "columns": "SECUCODE,SECURITY_CODE,REPORT_DATE,BUSINESS_REVIEW",
+            "filter": f'(SECUCODE="{stock_code}")',
+            "pageNumber": 1,
+            "pageSize": 1,
+            "source": "HSF10",
+            "client": "PC"
+        }
+        
+        try:
+            response = self._get_json(self.BUSINESS_REVIEW_URL, params)
             # 检查响应是否成功
             if response.get("code") == 0 and response.get("success") is True and response.get("result"):
                 return response["result"]["data"][0] if response["result"]["data"] else None

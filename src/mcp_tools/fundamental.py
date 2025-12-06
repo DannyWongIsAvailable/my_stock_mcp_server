@@ -107,6 +107,49 @@ def register_fundamental_tools(app: FastMCP, data_source: FinancialDataInterface
             return f"获取主营业务范围失败: {str(e)}"
 
     @app.tool()
+    def get_business_review(stock_code: str) -> str:
+        """
+        获取经营评述
+
+        获取指定股票的经营评述信息。
+
+        Args:
+            stock_code: 股票代码，包含交易所代码，格式如300059.SZ
+
+        Returns:
+            经营评述文本
+
+        Examples:
+            - get_business_review("688041.SH")
+        """
+        try:
+            logger.info(f"获取经营评述: {stock_code}")
+
+            # 从数据源获取原始数据
+            raw_data = data_source.get_business_review(stock_code)
+
+            if not raw_data:
+                return f"未找到股票代码 '{stock_code}' 的经营评述数据"
+
+            # 检查是否有错误信息
+            if "error" in raw_data:
+                error_msg = raw_data["error"]
+                return f"获取经营评述数据失败: {error_msg}"
+
+            # 提取BUSINESS_REVIEW内容
+            business_review = raw_data.get('BUSINESS_SCOPE', 'N/A')
+            
+            # 返回经营评述内容，如果没有则返回提示信息
+            if business_review and business_review != 'N/A':
+                return business_review
+            else:
+                return f"股票代码 '{stock_code}' 无经营评述数据"
+
+        except Exception as e:
+            logger.error(f"获取经营评述时出错: {e}")
+            return f"获取经营评述失败: {str(e)}"
+
+    @app.tool()
     def get_main_business(
         stock_code: str,
         report_date: Optional[str] = None

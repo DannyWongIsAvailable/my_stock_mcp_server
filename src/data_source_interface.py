@@ -201,3 +201,20 @@ class FinancialDataInterface(ABC):
             DataSourceError: 当数据源出现错误时
         """
         pass
+
+    @abstractmethod
+    def get_business_review(self, stock_code: str) -> Optional[Dict[Any, Any]]:
+        """
+        获取经营评述
+
+        Args:
+            stock_code: 股票代码，包含交易所代码，如300059.SZ
+
+        Returns:
+            经营评述数据字典，包含经营评述信息
+            如果没有找到数据或出错，返回包含错误信息的字典或者None
+
+        Raises:
+            DataSourceError: 当数据源出现错误时
+        """
+        pass
